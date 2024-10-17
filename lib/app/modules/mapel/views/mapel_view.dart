@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../data/models/model_mapel.dart';
+import '../../../data/repositories/repository_karyawan.dart';
 import '../controllers/mapel_controller.dart';
 import '../../../routes/app_pages.dart';
 
@@ -62,6 +64,13 @@ class MapelView extends GetView<MapelController> {
                       	'Keterangan: ${element.keterangan ?? 'N/A'}',
                       	style: TextStyle(fontSize: 14),
                     	),
+                      SizedBox(height: 8,),
+                      ElevatedButton(
+                         onPressed: () {
+                            _showUpdateModal(context, element);
+                          },
+                          child: Text('Update'),
+                        ),
                   	],
                 	),
               	),
@@ -97,3 +106,69 @@ class MapelView extends GetView<MapelController> {
 	);
   }
 }
+void _showUpdateModal(BuildContext context, DataMapel element) {
+  final _nameController = TextEditingController(text: element.name);
+  final _jenisController = TextEditingController(text: element.jenis);
+  final _keteranganController = TextEditingController(text: element.keterangan);
+  final _guruIdController = TextEditingController(text: element.guruId != null && element.guruId!.isNotEmpty ? element.guruId![0].toString() : '');
+  final repository = RepositoryKaryawan();
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Update Mata Pelajaran'),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: 'Nama Mapel'),
+              ),
+              TextField(
+                controller: _jenisController,
+                decoration: InputDecoration(labelText: 'Jenis Mapel'),
+                 ),
+              TextField(
+                controller: _keteranganController,
+                decoration: InputDecoration(labelText: 'Keterangan'),
+              ),
+TextField(
+                controller: _guruIdController,
+                decoration: InputDecoration(labelText: 'ID Guru Pengajar'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+
+              final updatedData = {
+                "name": _nameController.text,
+                "jenis": _jenisController.text,
+                "keterangan": _keteranganController.text,
+                "guru_id": [_guruIdController.text],
+              };
+              bool isSuccess = await repository.updateKaryawan(element.id!, updatedData);
+              if (isSuccess) {
+                Navigator.of(context).pop(); 
+                Get.snackbar('Update', 'Mata Pelajaran berhasil diupdate');
+              } else {
+                Get.snackbar('Update', 'Gagal mengupdate Mata Pelajaran');
+              }
+            },
+            child: Text('Update'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); 
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+

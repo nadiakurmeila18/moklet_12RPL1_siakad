@@ -49,9 +49,23 @@ class RepositoryMapel {
 	return null;
   }
 }
+Future<http.StreamedResponse?> updateMapel({required int id, required Map<String, dynamic> body}) async {
+    String url = CORS_ANYWHERE + DOMAIN;
+    var res = http.Request(
+      'PUT',
+      Uri.parse('$url/send_request?model=moklet.mapel&Id=$id'),
+    );
+    res.headers.addAll(defaultHeader);
+    res.body = jsonEncode(body);
+    http.StreamedResponse response = await res.send();
 
-  
-  
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      print(response.reasonPhrase);
+      return null;
+    }
+  }
 
 }
 

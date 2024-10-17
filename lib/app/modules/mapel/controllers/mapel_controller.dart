@@ -24,13 +24,22 @@ class MapelController extends GetxController {
   void onClose() {
     super.onClose();
   }
-  void getMapel() {
-	isLoaded(false);
-	RepositoryMapel().loadMapel().then((ModelMapel response) {
-  	mapel(response);
-  	isLoaded(true);
-	});
+  Future<void> getMapel() async {
+    isLoaded(false);
+    RepositoryMapel().loadMapel().then((ModelMapel response) {
+      mapel(response);
+      isLoaded(true);
+    });
   }
+
+  void updateMapel(int id, Map<String, dynamic> data) {
+  RepositoryMapel().updateMapel(id: id, body: data).then((response) {
+    if (response != null) {
+      getMapel();
+    }
+  });
+}
+
 
   void increment() => count.value++;
 }
