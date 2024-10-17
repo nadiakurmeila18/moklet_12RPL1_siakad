@@ -1,5 +1,5 @@
 import 'package:belajar_flutter/app/data/models/model_mapel.dart';
-import 'package:belajar_flutter/app/data/models/repositories/repository_mapel.dart';
+import 'package:belajar_flutter/app/data/repositories/repository_mapel.dart';
 import 'package:get/get.dart';
 
 class MapelController extends GetxController {

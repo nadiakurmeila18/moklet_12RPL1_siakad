@@ -8,6 +8,9 @@ class BottombarView extends GetView<BottombarController> {
   const BottombarView({Key? key});
   @override
   Widget build(BuildContext context) {
+  final initialIndex = Get.arguments != null ? Get.arguments['index'] : 0;
+	controller.changeIndex(initialIndex);
+
 	return GetBuilder<BottombarController>(
   	builder: (controller) {
     	return Scaffold(
