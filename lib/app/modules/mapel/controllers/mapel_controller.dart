@@ -31,15 +31,15 @@ class MapelController extends GetxController {
       isLoaded(true);
     });
   }
+  Future<void> deleteMapel(int id) async {
+    final repository = RepositoryMapel();
+    final response = await repository.deleteMapel(id);
 
-  void updateMapel(int id, Map<String, dynamic> data) {
-  RepositoryMapel().updateMapel(id: id, body: data).then((response) {
     if (response != null) {
-      getMapel();
+      print('Mapel dengan ID $id berhasil dihapus');
+      await getMapel();
+    } else {
+      print('Gagal menghapus mapel dengan ID $id');
     }
-  });
-}
-
-
-  void increment() => count.value++;
+  }
 }

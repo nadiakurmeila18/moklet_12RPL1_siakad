@@ -49,23 +49,41 @@ class RepositoryMapel {
 	return null;
   }
 }
-Future<http.StreamedResponse?> updateMapel({required int id, required Map<String, dynamic> body}) async {
-    String url = CORS_ANYWHERE + DOMAIN;
+Future<bool> updateMapel(int id, Map<String, dynamic> data) async {
+    String url = CORS_ANYWHERE + DOMAIN + '/send_request?model=moklet.mapel&id=$id';
     var res = http.Request(
       'PUT',
-      Uri.parse('$url/send_request?model=moklet.mapel&Id=$id'),
+      Uri.parse(url),
     );
     res.headers.addAll(defaultHeader);
-    res.body = jsonEncode(body);
+    res.body = jsonEncode(data);
+
+    http.StreamedResponse response = await res.send();
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  deleteMapel(int id) {}
+}
+Future<http.StreamedResponse?> deleteMapel(int id) async {
+    String url = CORS_ANYWHERE + DOMAIN;
+    var res = http.Request(
+      'DELETE',
+      Uri.parse('$url/send_request?model=moklet.mapel&id=$id'),
+    );
+    res.headers.addAll(defaultHeader);
     http.StreamedResponse response = await res.send();
 
+    print('Status Code: ${response.statusCode}');
     if (response.statusCode == 200) {
       return response;
     } else {
-      print(response.reasonPhrase);
+      print('Error Reason: ${response.reasonPhrase}');
       return null;
     }
   }
 
-}
 
